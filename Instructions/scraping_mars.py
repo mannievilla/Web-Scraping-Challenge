@@ -18,16 +18,17 @@ def scrape_all():
 
     html = browser.html
     soup = BeautifulSoup(html, "html.parser")
+    try:
+        news = soup.select_one("div.list_text")
 
-    news = soup.select_one("div.list_text")
+        news_title = news.find("div", class_="content_title").get_text()
 
-    news_title = news.find("div", class_="content_title").get_text()
+        news_p = news.find("div", class_="article_teaser_body").get_text()
 
-    news_p = news.find("div", class_="article_teaser_body").get_text()
-
-    data["news_title"] = news_title
-    data["news_paragraph"] = news_p
-
+        data["news_title"] = news_title
+        data["news_paragraph"] = news_p
+    except Exception as e :
+        print(e)
     url = "https://spaceimages-mars.com"
     browser.visit(url)
 
